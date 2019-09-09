@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { TestBed } from "@angular/core/testing";
+import { SaveService } from "./../services/save.service";
 
 @Component({
   selector: "app-post-list-component",
@@ -7,8 +7,10 @@ import { TestBed } from "@angular/core/testing";
   styleUrls: ["./post-list-component.component.scss"]
 })
 export class PostListComponentComponent implements OnInit {
-  @Input() posts;
-  constructor() {}
+  posts: any[];
+  constructor(private saveService: SaveService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.posts = this.saveService.posts;
+  }
 }

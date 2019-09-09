@@ -1,4 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
+import { SaveService } from "./../services/save.service";
+import { Subscription } from "rxjs/Subscription";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-post-list-item-component",
@@ -6,14 +9,17 @@ import { Component, OnInit, Input } from "@angular/core";
   styleUrls: ["./post-list-item-component.component.scss"]
 })
 export class PostListItemComponentComponent implements OnInit {
+  @Input() id: number;
   @Input() title: string;
   @Input() content: string;
   @Input() loveIts: number;
   @Input() created_at: Date;
 
-  constructor() {}
+  constructor(private saveService: SaveService, private router: Router) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.saveService.emitPosts();
+  }
 
   onLoveIts() {
     this.loveIts++;
@@ -21,5 +27,12 @@ export class PostListItemComponentComponent implements OnInit {
 
   onNotLoveIts() {
     this.loveIts--;
+  }
+
+  onDelete() {
+    this.saveService.deletePost(this.id);
+    this.router
+      .navigateByUrl("/", { skipLocationChange: true })
+      .then(() => this.router.navigate(["/posts"]));
   }
 }
